@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "术语精准翻译 · Tech Terms Translator",
+  "short_name": "术语翻译",
+  "version": "1.0.0",
+  "description": "为技术文档打造的 Edge 翻译插件：内置计算机术语表，术语译法准确统一；支持划词翻译与中英双语对照。",
+  "minimum_chrome_version": "109",
+  "icons": {
+    "16": "src/icons/icon16.png",
+    "32": "src/icons/icon32.png",
+    "48": "src/icons/icon48.png",
+    "128": "src/icons/icon128.png"
+  },
+  "action": {
+    "default_title": "术语精准翻译",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "src/icons/icon16.png",
+      "32": "src/icons/icon32.png",
+      "48": "src/icons/icon48.png",
+      "128": "src/icons/icon128.png"
+    }
+  },
+  "options_page": "src/options/options.html",
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "permissions": ["storage", "contextMenus", "activeTab", "scripting"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["src/content/content.js"],
+      "css": ["src/content/content.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "commands": {
+    "translate-page": {
+      "suggested_key": { "default": "Alt+T", "mac": "Alt+T" },
+      "description": "翻译 / 还原当前页面"
+    },
+    "translate-selection": {
+      "suggested_key": { "default": "Alt+S", "mac": "Alt+S" },
+      "description": "翻译当前选中的文字"
+    }
+  }
+}

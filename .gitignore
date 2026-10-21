@@ -1,0 +1,14 @@
+# 依赖（本项目无第三方依赖，保留以防日后引入）
+node_modules/
+
+# 打包产物
+dist/
+*.zip
+
+# 系统垃圾文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+.tmp/
+*.log

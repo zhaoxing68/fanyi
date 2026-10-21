@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>术语精准翻译 · 设置</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-logo" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="3" width="20" height="18" rx="4" stroke="currentColor" stroke-width="1.6" />
+            <path d="M6 9.5h6M9 7.5v5.5M7 13c.7 1.5 1.9 2.4 3.4 2.8M13.5 16l3-7 3 7M14.6 13.6h3.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <div class="brand-text">
+          <strong>术语精准翻译</strong>
+          <span>Tech Terms Translator</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="设置导航">
+        <button type="button" class="nav-item is-active" data-section="provider">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4 7h16M7 12h10M9 17h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          <span>服务商</span>
+        </button>
+        <button type="button" class="nav-item" data-section="translation">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4 6h9M8.5 6v2c0 3-2 5-4.5 6m2-4c.8 2 2.4 3.4 4.5 4M13 18l3.5-9 3.5 9M14.4 15.4h4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>翻译设置</span>
+        </button>
+        <button type="button" class="nav-item" data-section="glossary">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v18H7.5A2.5 2.5 0 0 1 5 18.5v-13Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+            <path d="M9 7.5h6M9 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          <span>术语表</span>
+        </button>
+        <button type="button" class="nav-item" data-section="excluded">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6" />
+            <path d="m6.5 6.5 11 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+          <span>站点排除</span>
+        </button>
+        <button type="button" class="nav-item" data-section="about">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6" />
+            <path d="M12 11v5m0-8.2v.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+          </svg>
+          <span>关于</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <span class="sidebar-tip">内置术语 · 术语优先</span>
+        <span id="sidebar-version" class="sidebar-version">v1.0.0</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="save-bar">
+        <div class="save-bar-info">
+          <span id="dirty-hint" class="dirty-hint" hidden>有未保存的修改</span>
+          <span id="save-hint" class="save-hint">修改后请点击保存</span>
+        </div>
+        <button id="save-btn" type="button" class="primary-btn">保存设置</button>
+      </div>
+
+      <!-- ============================ 服务商 ============================ -->
+      <section class="section" id="section-provider">
+        <header class="section-head">
+          <h1>翻译服务商</h1>
+          <p class="section-desc">
+            AI 大模型（DeepSeek / OpenAI 兼容）会把内置术语表作为硬性约束注入提示词，术语最准确；
+            机器翻译类服务会先做术语占位符保护；「仅术语词典」完全离线，只替换命中的专业术语。
+          </p>
+        </header>
+        <div id="provider-list" class="provider-grid" role="radiogroup" aria-label="翻译服务商"></div>
+        <div id="provider-detail" class="card provider-detail" hidden>
+          <div class="detail-head">
+            <div class="detail-head-main">
+              <h2 id="provider-detail-title"></h2>
+              <p id="provider-detail-desc" class="section-desc"></p>
+            </div>
+            <span id="provider-detail-kind" class="badge">—</span>
+          </div>
+          <div id="provider-fields" class="field-list"></div>
+          <div class="detail-actions">
+            <button id="test-btn" type="button" class="secondary-btn">测试连接</button>
+            <a id="provider-docs" class="link" target="_blank" rel="noopener noreferrer" hidden>获取密钥 / 了解用法 ↗</a>
+            <span id="test-result" class="test-result" role="status"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ 翻译设置 ============================ -->
+      <section class="section" id="section-translation" hidden>
+        <header class="section-head">
+          <h1>翻译设置</h1>
+          <p class="section-desc">控制译文语言、整页展示方式与划词行为。所有修改在点击「保存设置」后生效。</p>
+        </header>
+
+        <div class="card">
+          <div class="form-row">
+            <label class="form-label" for="target-lang">目标语言</label>
+            <select id="target-lang" class="select"></select>
+            <p class="form-hint">译文输出语言。术语高亮仅在目标语言为中文时生效。</p>
+          </div>
+          <div class="form-row">
+            <span class="form-label">整页展示模式</span>
+            <div id="page-mode-group" class="choice-group" role="radiogroup" aria-label="整页展示模式"></div>
+          </div>
+          <div class="form-row">
+            <label class="form-label" for="selection-trigger">划词触发方式</label>
+            <select id="selection-trigger" class="select"></select>
+            <p class="form-hint">选择「选中后自动翻译」时无需点击按钮，选中文字即请求翻译。</p>
+          </div>
+          <div class="form-row">
+            <label class="form-label" for="batch-char-limit">单批字符数</label>
+            <div class="range-row">
+              <input id="batch-char-limit" type="range" min="1000" max="6000" step="500" />
+              <output id="batch-char-output" class="range-output">3000</output>
+            </div>
+            <p class="form-hint">单次请求合并的文本上限。越大请求次数越少，单次失败的影响范围也越大。</p>
+          </div>
+        </div>
+
+        <div class="card switch-list">
+          <label class="switch-row" for="enforce-terms">
+            <span class="switch-text">
+              <span class="switch-title">术语强制保护</span>
+              <span class="switch-desc">AI 服务商把内置术语表作为硬性约束；机器翻译类先做占位符保护，避免术语被误译。</span>
+            </span>
+            <span class="switch">
+              <input id="enforce-terms" type="checkbox" role="switch" />
+              <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            </span>
+          </label>
+          <label class="switch-row" for="highlight-terms">
+            <span class="switch-text">
+              <span class="switch-title">术语高亮</span>
+              <span class="switch-desc">在译文中用虚线下划线标出命中的专业术语，悬停可查看英文与注释。</span>
+            </span>
+            <span class="switch">
+              <input id="highlight-terms" type="checkbox" role="switch" />
+              <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            </span>
+          </label>
+          <label class="switch-row" for="selection-enabled">
+            <span class="switch-text">
+              <span class="switch-title">划词翻译</span>
+              <span class="switch-desc">选中网页文字后显示「译」按钮或自动翻译（快捷键 Alt+S 始终可用）。</span>
+            </span>
+            <span class="switch">
+              <input id="selection-enabled" type="checkbox" role="switch" />
+              <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            </span>
+          </label>
+          <label class="switch-row" for="cache-enabled">
+            <span class="switch-text">
+              <span class="switch-title">翻译缓存</span>
+              <span class="switch-desc">相同文本在本地复用译文，减少重复请求与费用。</span>
+            </span>
+            <span class="switch">
+              <input id="cache-enabled" type="checkbox" role="switch" />
+              <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            </span>
+          </label>
+          <label class="switch-row" for="free-fallback">
+            <span class="switch-text">
+              <span class="switch-title">免费服务商兜底</span>
+              <span class="switch-desc">当大模型或付费服务请求失败时，自动回退到可用的免费服务商。</span>
+            </span>
+            <span class="switch">
+              <input id="free-fallback" type="checkbox" role="switch" />
+              <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- ============================ 术语表 ============================ -->
+      <section class="section" id="section-glossary" hidden>
+        <header class="section-head">
+          <h1>术语表</h1>
+          <p class="section-desc">
+            内置 <strong id="glossary-total">0</strong> 条计算机术语，覆盖 <strong id="glossary-category-count">0</strong> 个分类。
+            翻译时术语译名会作为约束，保证全文译法统一。
+          </p>
+        </header>
+
+        <div id="glossary-stats" class="stats-row" aria-label="术语分类统计"></div>
+
+        <div class="card">
+          <div class="toolbar">
+            <div class="search-box">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7" />
+                <path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+              </svg>
+              <input id="glossary-search" type="search" placeholder="搜索英文 / 中文 / 备注…" aria-label="搜索术语" />
+            </div>
+            <select id="glossary-category" class="select" aria-label="按分类筛选"></select>
+            <span id="glossary-count" class="muted"></span>
+          </div>
+
+          <div class="term-table">
+            <div class="term-row term-row-head" role="row">
+              <span>英文</span>
+              <span>中文</span>
+              <span>分类</span>
+              <span>备注</span>
+            </div>
+            <div id="glossary-rows"></div>
+          </div>
+
+          <div class="pagination">
+            <button id="glossary-prev" type="button" class="secondary-btn">上一页</button>
+            <span id="glossary-page-info" class="muted"></span>
+            <button id="glossary-next" type="button" class="secondary-btn">下一页</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>自定义术语</h2>
+            <span id="custom-count" class="badge">0 条</span>
+          </div>
+          <p class="section-desc">自定义术语会覆盖同名的内置术语，保存后对新翻译立即生效。</p>
+          <div class="custom-form">
+            <input id="custom-en" class="text-input" type="text" placeholder="英文，例如 Kubernetes" aria-label="自定义术语英文" spellcheck="false" />
+            <input id="custom-zh" class="text-input" type="text" placeholder="中文，例如 Kubernetes（容器编排平台）" aria-label="自定义术语中文" />
+            <input id="custom-note" class="text-input" type="text" placeholder="备注（可选）" aria-label="自定义术语备注" />
+            <button id="custom-add" type="button" class="secondary-btn">添加</button>
+          </div>
+          <p id="custom-error" class="field-error" hidden></p>
+          <div id="custom-rows" class="custom-rows"></div>
+          <div class="import-export">
+            <button id="terms-export" type="button" class="secondary-btn">导出 JSON</button>
+            <label class="secondary-btn file-btn">
+              导入 JSON
+              <input id="terms-import" type="file" accept=".json,application/json" />
+            </label>
+            <span class="muted">支持 { "terms": [...] } 或术语数组格式</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ 站点排除 ============================ -->
+      <section class="section" id="section-excluded" hidden>
+        <header class="section-head">
+          <h1>站点排除</h1>
+          <p class="section-desc">列表中的站点不会执行整页翻译，适合内网系统或已自带中文的网站。划词翻译不受影响。</p>
+        </header>
+        <div class="card">
+          <label class="form-label" for="excluded-sites">排除的站点域名</label>
+          <textarea id="excluded-sites" class="textarea" rows="8" spellcheck="false" placeholder="example.com&#10;docs.example.org"></textarea>
+          <div class="row-between">
+            <span id="excluded-hint" class="muted">每行一个域名，支持子域名匹配</span>
+            <button id="clear-excluded" type="button" class="text-btn">清空列表</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ 关于 ============================ -->
+      <section class="section" id="section-about" hidden>
+        <header class="section-head">
+          <h1>关于</h1>
+          <p class="section-desc">术语精准翻译是一款面向技术文档的 Edge 翻译扩展，核心目标是让计算机术语的译法准确且统一。</p>
+        </header>
+
+        <div class="card">
+          <div class="kv-grid">
+            <span class="kv-label">版本</span>
+            <span id="about-version">v1.0.0</span>
+            <span class="kv-label">内置术语</span>
+            <span id="about-glossary">—</span>
+            <span class="kv-label">自定义术语</span>
+            <span id="about-custom">—</span>
+            <span class="kv-label">排除站点</span>
+            <span id="about-excluded">—</span>
+          </div>
+
+          <h3 class="about-title">键盘快捷键</h3>
+          <div class="shortcut-list">
+            <div class="shortcut-item"><kbd>Alt</kbd><span>+</span><kbd>T</kbd><span class="shortcut-desc">翻译 / 还原当前页面</span></div>
+            <div class="shortcut-item"><kbd>Alt</kbd><span>+</span><kbd>S</kbd><span class="shortcut-desc">翻译当前选中的文字</span></div>
+          </div>
+          <p class="muted">快捷键可在 edge://extensions/shortcuts 中查看与修改。</p>
+
+          <h3 class="about-title">隐私说明</h3>
+          <ul class="privacy-list">
+            <li>所有设置与 API Key 仅保存在本机浏览器的本地存储中，不会上传到任何服务器。</li>
+            <li>待翻译的文本会直接发送到你所选服务商的接口，扩展本身不经过任何中转服务器。</li>
+            <li>本扩展不收集统计数据、不做用户画像，也不加载远程字体、图片或脚本。</li>
+            <li>内置术语表随扩展打包，可离线使用「仅术语词典」服务。</li>
+          </ul>
+
+          <div class="about-actions">
+            <button id="clear-cache" type="button" class="secondary-btn">清除翻译缓存</button>
+            <button id="reset-all" type="button" class="danger-btn">恢复默认设置</button>
+          </div>
+          <p class="muted">恢复默认设置会清空已保存的 API Key、自定义术语与站点排除列表。</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- ============================ 模板 ============================ -->
+  <template id="provider-card-template">
+    <label class="provider-card">
+      <input type="radio" name="provider" class="provider-radio" />
+      <span class="provider-card-body">
+        <span class="provider-card-top">
+          <span class="provider-card-name"></span>
+          <span class="badge provider-card-kind"></span>
+        </span>
+        <span class="provider-card-desc"></span>
+        <span class="provider-card-hint muted"></span>
+      </span>
+    </label>
+  </template>
+
+  <template id="provider-field-template">
+    <label class="field">
+      <span class="field-label"></span>
+      <span class="field-control">
+        <input class="field-input" type="text" />
+        <button type="button" class="field-toggle" hidden>显示</button>
+      </span>
+      <span class="field-help muted"></span>
+    </label>
+  </template>
+
+  <template id="term-row-template">
+    <div class="term-row" role="row">
+      <span class="term-en"></span>
+      <span class="term-zh"></span>
+      <span class="term-category"></span>
+      <span class="term-note"></span>
+    </div>
+  </template>
+
+  <template id="custom-term-template">
+    <div class="custom-term-row">
+      <input class="text-input ct-en" type="text" placeholder="英文术语" aria-label="英文术语" spellcheck="false" />
+      <input class="text-input ct-zh" type="text" placeholder="中文译名" aria-label="中文译名" />
+      <input class="text-input ct-note" type="text" placeholder="备注（可选）" aria-label="备注" />
+      <button class="icon-btn ct-remove" type="button" aria-label="删除该术语">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M5 7h14M9.5 7V5.5A1.5 1.5 0 0 1 11 4h2a1.5 1.5 0 0 1 1.5 1.5V7M7 7l.8 12a1.5 1.5 0 0 0 1.5 1.4h5.4a1.5 1.5 0 0 0 1.5-1.4L17 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  </template>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>
